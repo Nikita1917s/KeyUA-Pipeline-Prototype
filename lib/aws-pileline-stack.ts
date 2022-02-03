@@ -7,10 +7,21 @@ import { SlackChannelConfiguration } from "@aws-cdk/aws-chatbot";
 import { NotificationRule } from "@aws-cdk/aws-codestarnotifications";
 import { Topic } from '@aws-cdk/aws-sns';
 
+export interface StackProps extends cdk.StackProps {
+  owner: string,
+  repo: string,
+  branch: string,
+  oauthToken: string,
+  projectName: string,
+  pipelineName: string,
+  slackWorkspaceId: string,
+  slackChannelId: string
+}
+
 //Initiate a new Pipeline Stack to be Formed in the 'AWC CloudFormation'
-export class MyPipelineStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, stackId: string,) {
-    super(scope, stackId);
+export class newPipelineStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, stackId: string, props: StackProps) {
+    super(scope, stackId, props);
 
     /*--------------------Pipeline Block--------------------*/
 
@@ -22,10 +33,10 @@ export class MyPipelineStack extends cdk.Stack {
     //Set new GitHub Action connection (version 1)
     let gitHubSourceAction = new GitHubSourceAction({
       actionName: "github",
-      owner: "Nikita1917s",
-      repo: "KeyUA-Pipeline-Prototype",
-      branch: 'main',
-      oauthToken: cdk.SecretValue.secretsManager('GITHUB_OAUTH_TOKEN_TESTING'),
+      owner: props.owner,
+      repo: props.repo,
+      branch: props.branch,
+      oauthToken: cdk.SecretValue.secretsManager(props.oauthToken),
       output: sourceArtifact,
       trigger: GitHubTrigger.WEBHOOK,
     });
@@ -44,8 +55,8 @@ export class MyPipelineStack extends cdk.Stack {
     testCodebuildPolicy.attachToRole(testCodebuildRole)
 
     //Initiate a new CloudFormation Stack --> PipelineProject that will be build
-    let project = new PipelineProject(this, 'MyPipelineStackProject', {
-      projectName: `MyPipelineStackProject`,
+    let project = new PipelineProject(this, props.projectName, {
+      projectName: props.projectName,
       buildSpec: BuildSpec.fromSourceFilename('buildspec.yml'),
       role: testCodebuildRole,
       environment: {
@@ -63,8 +74,8 @@ export class MyPipelineStack extends cdk.Stack {
     });
 
     //Create Pipeline Instace
-    const pipeline = new Pipeline(this, 'MyFirstPipeline', {
-      pipelineName: 'MyPipeline',
+    const pipeline = new Pipeline(this, props.pipelineName, {
+      pipelineName: props.pipelineName,
       stages: [
         {
           stageName: "Source",
@@ -83,9 +94,9 @@ export class MyPipelineStack extends cdk.Stack {
     const slackChannel = new SlackChannelConfiguration(this, 'pipeline-slack', {
       slackChannelConfigurationName: 'pipeline-deploy',
       //slackWorkspaceId can be taken from 'AWS Chatbot' --> 'Slack workspace' Client
-      slackWorkspaceId: 'TG1K2568N',
+      slackWorkspaceId: props.slackWorkspaceId,
       //slackWorkspaceId can be taken from 'Slack App' --> 'Slack Channel details'
-      slackChannelId: 'C031Z1KJH6C',
+      slackChannelId: props.slackChannelId,
     });
 
     //Create a new SNS Topic for Slack notifications
@@ -97,7 +108,7 @@ export class MyPipelineStack extends cdk.Stack {
 
     //Set Up Notification Rules to track changes on the Pipeline
     new NotificationRule(this, 'NotificationRule', {
-      notificationRuleName: `${pipeline.pipelineName}-pipeline-result`,
+      notificationRuleName: `${props.pipelineName}-pipeline-result`,
       source: pipeline,
       events: [
         PIPELINE_EXECUTION_SUCCEEDED,

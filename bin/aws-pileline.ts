@@ -1,25 +1,20 @@
 #!/usr/bin/env node
 import * as cdk from "@aws-cdk/core";
-import { MyPipelineStack } from '../lib/aws-pileline-stack';
-// import {Repository} from "@aws-cdk/aws-ecr";
-
-// declare const repository: Repository;
-
-// repository.onImageScanCompleted('ImageScanComplete')
-
-// interface StackParams {
-//   // env: object
-//   repository: Repository
-//   // codepipelineSuccessSlackConfig: SlackChannelConfiguration
-//   // codepipelineFailedSlackConfig: SlackChannelConfiguration
-// }
-// const StackParams = {
-// //   repository: 'https://github.com/Nikita1917s/KeyUA-Pipeline-Prototype.git'
-// repository: Repository
-
-// }
+import { newPipelineStack } from '../lib/aws-pileline-stack';
 
 const app = new cdk.App();
-new MyPipelineStack(app, 'MyPipelineStack');
+
+let PipelineProps = {
+    owner: "Nikita1917s",
+    repo: "KeyUA-Pipeline-Prototype",
+    branch: "main",
+    oauthToken: 'GITHUB_OAUTH_TOKEN_TESTING',
+    projectName: "Updated--PipelineStackProject",
+    pipelineName: "Updated--FirstPipeline",
+    slackWorkspaceId: "TG1K2568N",
+    slackChannelId: "C031Z1KJH6C"
+}
+
+new newPipelineStack(app, 'Updated--PipelineStack', PipelineProps);
 
 app.synth();
