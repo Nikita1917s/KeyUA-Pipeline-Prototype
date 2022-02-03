@@ -15,10 +15,10 @@
 * AWS Account with corresponding Role to work with required permissions.
 * All nessesary params to create a new Pipeline and all needed servises.
 1) GitHub Credidentials to be tracked
-    `+` owner: `UserName of the Repository owner` (ex: 'user123'), 
-    `+` repo: `Repository name` (ex: 'repository123'),
-    `+` branch: `Branch name` (ex: 'main'),
-    `+` oauthToken: `Secret that is located in the 'AWS Secrets Manager'` (ex: 'The password for a GITHUB - Personal access token')
+* owner: `UserName of the Repository owner` (ex: 'user123'), 
+* repo: `Repository name` (ex: 'repository123'),
+* branch: `Branch name` (ex: 'main'),
+* oauthToken: `Secret that is located in the 'AWS Secrets Manager'` (ex: 'The password for a GITHUB - Personal access token')
 2) New CloudFormation Stack --> PipelineProject info
     `+` projectName: `Name of the new CloudFormation Stack (Project) to be created` (ex: 'newPipelineStackProject').
 3) New Pipeline Instace info
@@ -28,6 +28,7 @@
 #### Slack Notifications Block
 ##### To connect a recently created Pipeline to the Slack app in order to recieve notifications
 1) Create a new Slack Channel in your Slack WorkSpace.
-2) Establish a new Connection in the 'AWS Chatbot' ('Configure a new client) --> slackWorkspaceId can be taken from 'AWS Chatbot' --> 'Slack workspace' Client.
+2) Establish a new Connection in the 'AWS Chatbot' ('Configure a new client) 
+--> slackWorkspaceId can be taken from 'AWS Chatbot' --> 'Slack workspace' Client.
 3) Add slackWorkspaceId to the Notification Rule.
 4) Check the Slack App after Pipeline process 
