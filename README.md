@@ -28,7 +28,7 @@
 #### Slack Notifications Block
 ##### To connect a recently created Pipeline to the Slack app in order to recieve notifications
 1) Create a new Slack Channel in your Slack WorkSpace.
-2) Establish a new Connection in the 'AWS Chatbot' ('Configure a new client) 
+2) Establish a new Connection in the 'AWS Chatbot' ('Configure a new client)  
 --> slackWorkspaceId can be taken from 'AWS Chatbot' --> 'Slack workspace' Client.
-3) Add slackWorkspaceId to the Notification Rule.
-4) Check the Slack App after Pipeline process 
+4) Add slackWorkspaceId to the Notification Rule.
+5) Check the Slack App after Pipeline process 
