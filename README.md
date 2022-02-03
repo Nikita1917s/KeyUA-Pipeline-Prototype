@@ -20,9 +20,9 @@
 * branch: `Branch name` (ex: 'main'),
 * oauthToken: `Secret that is located in the 'AWS Secrets Manager'` (ex: 'The password for a GITHUB - Personal access token')
 2) New CloudFormation Stack --> PipelineProject info
-    `+` projectName: `Name of the new CloudFormation Stack (Project) to be created` (ex: 'newPipelineStackProject').
+* projectName: `Name of the new CloudFormation Stack (Project) to be created` (ex: 'newPipelineStackProject').
 3) New Pipeline Instace info
-    `+` projectName: `Name of the new Pipeline Instace to be created` (ex: 'newFirstPipeline').
+* projectName: `Name of the new Pipeline Instace to be created` (ex: 'newFirstPipeline').
 
 
 #### Slack Notifications Block
