@@ -1,7 +1,7 @@
 # KeyUA-Pipeline-Prototype
 AWS CDK - CodePipeline - Prototype  
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+The `cdk.json` file tells the CDK Toolkit how to execute your app
 
 ## Useful commands
 
