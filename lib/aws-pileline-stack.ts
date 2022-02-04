@@ -1,12 +1,6 @@
-import * as cdk from "@aws-cdk/core";
-import { Artifact, Pipeline } from '@aws-cdk/aws-codepipeline';
-import { GitHubSourceAction, GitHubTrigger, CodeBuildAction, CodeBuildActionType, } from '@aws-cdk/aws-codepipeline-actions';
-import { BuildSpec, PipelineProject } from '@aws-cdk/aws-codebuild';
-import { AnyPrincipal, Effect, Policy, PolicyStatement, Role } from "@aws-cdk/aws-iam";
-import { SlackChannelConfiguration } from "@aws-cdk/aws-chatbot";
-import { NotificationRule } from "@aws-cdk/aws-codestarnotifications";
-import { Topic } from '@aws-cdk/aws-sns';
+import * as cdk from 'aws-cdk-lib';
 
+//Set StackProps data types
 export interface StackProps extends cdk.StackProps {
   owner: string,
   repo: string,
@@ -20,34 +14,34 @@ export interface StackProps extends cdk.StackProps {
 
 //Initiate a new Pipeline Stack to be Formed in the 'AWC CloudFormation'
 export class newPipelineStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, stackId: string, props: StackProps) {
+  constructor(scope: cdk.App, stackId: string, props: StackProps) {
     super(scope, stackId, props);
 
     /*--------------------Pipeline Block--------------------*/
 
     //Create Artifacts for the Actions Outputs
-    const sourceArtifact = new Artifact('SourceArtifact');
-    const buildArtifact = new Artifact('BuildArtifact');
+    const sourceArtifact = new cdk.aws_codepipeline.Artifact('SourceArtifact');
+    const buildArtifact = new cdk.aws_codepipeline.Artifact('BuildArtifact');
 
     //Source Pipeline Stage
     //Set new GitHub Action connection (version 1)
-    let gitHubSourceAction = new GitHubSourceAction({
+    let gitHubSourceAction = new cdk.aws_codepipeline_actions.GitHubSourceAction({
       actionName: "github",
       owner: props.owner,
       repo: props.repo,
       branch: props.branch,
       oauthToken: cdk.SecretValue.secretsManager(props.oauthToken),
       output: sourceArtifact,
-      trigger: GitHubTrigger.WEBHOOK,
+      //trigger: cdk.GitHubTrigger.WEBHOOK,
     });
 
     //Set a new Codebuild Role for a PipelineProject
-    const testCodebuildRole = new Role(this, 'project-role', {
-      assumedBy: new AnyPrincipal()
+    const testCodebuildRole = new cdk.aws_iam.Role(this, 'project-role', {
+      assumedBy: new cdk.aws_iam.AnyPrincipal()
     })
-    const testCodebuildPolicy = new Policy(this, 'project-policy', {
-      statements: [new PolicyStatement({
-        effect: Effect.ALLOW,
+    const testCodebuildPolicy = new cdk.aws_iam.Policy(this, 'project-policy', {
+      statements: [new cdk.aws_iam.PolicyStatement({
+        effect: cdk.aws_iam.Effect.ALLOW,
         actions: ["ecr:*"],
         resources: ["*"]
       })]
@@ -55,9 +49,9 @@ export class newPipelineStack extends cdk.Stack {
     testCodebuildPolicy.attachToRole(testCodebuildRole)
 
     //Initiate a new CloudFormation Stack --> PipelineProject that will be build
-    let project = new PipelineProject(this, props.projectName, {
+    let project = new cdk.aws_codebuild.PipelineProject(this, props.projectName, {
       projectName: props.projectName,
-      buildSpec: BuildSpec.fromSourceFilename('buildspec.yml'),
+      buildSpec: cdk.aws_codebuild.BuildSpec.fromSourceFilename('buildspec.yml'),
       role: testCodebuildRole,
       environment: {
         privileged: true
@@ -65,16 +59,16 @@ export class newPipelineStack extends cdk.Stack {
     });
 
     //Build Pipeline Stage
-    let codeBuildAction = new CodeBuildAction({
+    let codeBuildAction = new cdk.aws_codepipeline_actions.CodeBuildAction({
       actionName: "codebuild",
       input: sourceArtifact,
       outputs: [buildArtifact],
       project: project,
-      type: CodeBuildActionType.BUILD
+      type: cdk.aws_codepipeline_actions.CodeBuildActionType.BUILD
     });
 
     //Create Pipeline Instace
-    const pipeline = new Pipeline(this, props.pipelineName, {
+    const pipeline = new cdk.aws_codepipeline.Pipeline(this, props.pipelineName, {
       pipelineName: props.pipelineName,
       stages: [
         {
@@ -91,7 +85,7 @@ export class newPipelineStack extends cdk.Stack {
     /*--------------------Slack Notifications Block--------------------*/
 
     //Configure slackChannel notifications
-    const slackChannel = new SlackChannelConfiguration(this, 'pipeline-slack', {
+    const slackChannel = new cdk.aws_chatbot.SlackChannelConfiguration(this, 'pipeline-slack', {
       slackChannelConfigurationName: 'pipeline-deploy',
       //slackWorkspaceId can be taken from 'AWS Chatbot' --> 'Slack workspace' Client
       slackWorkspaceId: props.slackWorkspaceId,
@@ -100,14 +94,14 @@ export class newPipelineStack extends cdk.Stack {
     });
 
     //Create a new SNS Topic for Slack notifications
-    const topic = new Topic(this, 'PipelineTopic');
+    const topic = new cdk.aws_sns.Topic(this, 'PipelineTopic');
 
     //Events for notification rules on pipelines to be tracked 
     const PIPELINE_EXECUTION_SUCCEEDED = 'codepipeline-pipeline-pipeline-execution-succeeded';
     const PIPELINE_EXECUTION_FAILED = 'codepipeline-pipeline-pipeline-execution-failed';
 
     //Set Up Notification Rules to track changes on the Pipeline
-    new NotificationRule(this, 'NotificationRule', {
+    new cdk.aws_codestarnotifications.NotificationRule(this, 'NotificationRule', {
       notificationRuleName: `${props.pipelineName}-pipeline-result`,
       source: pipeline,
       events: [

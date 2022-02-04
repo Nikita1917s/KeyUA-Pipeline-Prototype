@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-import * as cdk from "@aws-cdk/core";
+// import * as cdk from "@aws-cdk/core";
+import { App }from 'aws-cdk-lib';
 import { newPipelineStack } from '../lib/aws-pileline-stack';
 
-const app = new cdk.App();
+const app = new App();
 
 let PipelineProps = {
     owner: "Nikita1917s",
@@ -15,6 +16,6 @@ let PipelineProps = {
     slackChannelId: "C031Z1KJH6C"
 }
 
-new newPipelineStack(app, 'Updated--PipelineStack', PipelineProps);
+new newPipelineStack(app, 'New--PipelineStack', PipelineProps);
 
 app.synth();
