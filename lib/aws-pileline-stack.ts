@@ -10,7 +10,7 @@ export interface StackProps extends cdk.StackProps {
   pipelineName: string,
   slackWorkspaceId: string,
   slackChannelId: string
-}
+};
 
 //Initiate a new Pipeline Stack to be Formed in the 'AWC CloudFormation'
 export class newPipelineStack extends cdk.Stack {
@@ -32,13 +32,12 @@ export class newPipelineStack extends cdk.Stack {
       branch: props.branch,
       oauthToken: cdk.SecretValue.secretsManager(props.oauthToken),
       output: sourceArtifact,
-      //trigger: cdk.GitHubTrigger.WEBHOOK,
     });
 
     //Set a new Codebuild Role for a PipelineProject
     const testCodebuildRole = new cdk.aws_iam.Role(this, 'project-role', {
       assumedBy: new cdk.aws_iam.AnyPrincipal()
-    })
+    });
     const testCodebuildPolicy = new cdk.aws_iam.Policy(this, 'project-policy', {
       statements: [new cdk.aws_iam.PolicyStatement({
         effect: cdk.aws_iam.Effect.ALLOW,
@@ -46,7 +45,7 @@ export class newPipelineStack extends cdk.Stack {
         resources: ["*"]
       })]
     });
-    testCodebuildPolicy.attachToRole(testCodebuildRole)
+    testCodebuildPolicy.attachToRole(testCodebuildRole);
 
     //Initiate a new CloudFormation Stack --> PipelineProject that will be build
     let project = new cdk.aws_codebuild.PipelineProject(this, props.projectName, {
@@ -110,5 +109,5 @@ export class newPipelineStack extends cdk.Stack {
       ],
       targets: [topic, slackChannel],
     });
-  }
-}
+  };
+};

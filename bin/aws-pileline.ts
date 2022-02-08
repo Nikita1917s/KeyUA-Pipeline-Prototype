@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// import * as cdk from "@aws-cdk/core";
 import { App }from 'aws-cdk-lib';
 import { newPipelineStack } from '../lib/aws-pileline-stack';
 
