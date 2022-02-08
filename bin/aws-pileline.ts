@@ -11,6 +11,7 @@ let PipelineProps = {
     oauthToken: 'GITHUB_OAUTH_TOKEN_TESTING',
     projectName: "Updated--PipelineStackProject",
     pipelineName: "Updated--FirstPipeline",
+    slackNotification: true,
     slackWorkspaceId: "TG1K2568N",
     slackChannelId: "C031Z1KJH6C"
 }

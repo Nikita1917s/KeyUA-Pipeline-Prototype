@@ -8,6 +8,7 @@ export interface StackProps extends cdk.StackProps {
   oauthToken: string,
   projectName: string,
   pipelineName: string,
+  slackNotification: boolean,
   slackWorkspaceId: string,
   slackChannelId: string
 };
@@ -83,31 +84,35 @@ export class newPipelineStack extends cdk.Stack {
 
     /*--------------------Slack Notifications Block--------------------*/
 
-    //Configure slackChannel notifications
-    const slackChannel = new cdk.aws_chatbot.SlackChannelConfiguration(this, 'pipeline-slack', {
-      slackChannelConfigurationName: 'pipeline-deploy',
-      //slackWorkspaceId can be taken from 'AWS Chatbot' --> 'Slack workspace' Client
-      slackWorkspaceId: props.slackWorkspaceId,
-      //slackWorkspaceId can be taken from 'Slack App' --> 'Slack Channel details'
-      slackChannelId: props.slackChannelId,
-    });
+    //Create Slack Notifications on request
+    if (props.slackNotification) {
 
-    //Create a new SNS Topic for Slack notifications
-    const topic = new cdk.aws_sns.Topic(this, 'PipelineTopic');
+      //Configure slackChannel notifications
+      const slackChannel = new cdk.aws_chatbot.SlackChannelConfiguration(this, 'pipeline-slack', {
+        slackChannelConfigurationName: 'pipeline-deploy',
+        //slackWorkspaceId can be taken from 'AWS Chatbot' --> 'Slack workspace' Client
+        slackWorkspaceId: props.slackWorkspaceId,
+        //slackWorkspaceId can be taken from 'Slack App' --> 'Slack Channel details'
+        slackChannelId: props.slackChannelId,
+      });
 
-    //Events for notification rules on pipelines to be tracked 
-    const PIPELINE_EXECUTION_SUCCEEDED = 'codepipeline-pipeline-pipeline-execution-succeeded';
-    const PIPELINE_EXECUTION_FAILED = 'codepipeline-pipeline-pipeline-execution-failed';
+      //Create a new SNS Topic for Slack notifications
+      const topic = new cdk.aws_sns.Topic(this, 'PipelineTopic');
 
-    //Set Up Notification Rules to track changes on the Pipeline
-    new cdk.aws_codestarnotifications.NotificationRule(this, 'NotificationRule', {
-      notificationRuleName: `${props.pipelineName}-pipeline-result`,
-      source: pipeline,
-      events: [
-        PIPELINE_EXECUTION_SUCCEEDED,
-        PIPELINE_EXECUTION_FAILED
-      ],
-      targets: [topic, slackChannel],
-    });
+      //Events for notification rules on pipelines to be tracked 
+      const PIPELINE_EXECUTION_SUCCEEDED = 'codepipeline-pipeline-pipeline-execution-succeeded';
+      const PIPELINE_EXECUTION_FAILED = 'codepipeline-pipeline-pipeline-execution-failed';
+
+      //Set Up Notification Rules to track changes on the Pipeline
+      new cdk.aws_codestarnotifications.NotificationRule(this, 'NotificationRule', {
+        notificationRuleName: `${props.pipelineName}-pipeline-result`,
+        source: pipeline,
+        events: [
+          PIPELINE_EXECUTION_SUCCEEDED,
+          PIPELINE_EXECUTION_FAILED
+        ],
+        targets: [topic, slackChannel],
+      });
+    };
   };
 };

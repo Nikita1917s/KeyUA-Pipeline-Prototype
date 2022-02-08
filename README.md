@@ -31,6 +31,7 @@ To save a new password type to console:  -->
 
 
 #### Slack Notifications Block
+* To create a Slack Notifications you have to pass `true` boolean in corresponding prop
 ##### To connect a recently created Pipeline to the Slack app in order to recieve notifications
 1) Create a new Slack Channel in your Slack WorkSpace.
 2) Establish a new Connection in the 'AWS Chatbot' ('Configure a new client)  
@@ -38,6 +39,6 @@ To save a new password type to console:  -->
 4) Add slackWorkspaceId to the Notification Rule.
 5) Check the Slack App after Pipeline process 
 
-## Run App type:
+## To run the application enter to the console next commands:
 1) `cdk bootstrap`   deployment of a AWS CloudFormation template to a specific AWS environment
 2) `cdk deploy`      deploy this stack to your default AWS account/region
