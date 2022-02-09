@@ -1,16 +1,19 @@
 import * as cdk from 'aws-cdk-lib';
+import { ConnectionType } from '../helpers/connection-type';
+
 
 //Set StackProps data types
 export interface StackProps extends cdk.StackProps {
+  actionName: string,
   owner: string,
   repo: string,
   branch: string,
-  oauthToken: string,
   projectName: string,
   pipelineName: string,
-  slackNotification: boolean,
+  slackNotifications: boolean,
   slackWorkspaceId: string,
-  slackChannelId: string
+  slackChannelId: string,
+  connectionArn: string
 };
 
 //Initiate a new Pipeline Stack to be Formed in the 'AWC CloudFormation'
@@ -25,34 +28,37 @@ export class newPipelineStack extends cdk.Stack {
     const buildArtifact = new cdk.aws_codepipeline.Artifact('BuildArtifact');
 
     //Source Pipeline Stage
-    //Set new GitHub Action connection (version 1)
-    let gitHubSourceAction = new cdk.aws_codepipeline_actions.GitHubSourceAction({
-      actionName: "github",
+    //codecommitRepository is used for CodeCommitSource type
+    const codecommitRepository = cdk.aws_codecommit.Repository.fromRepositoryName(this, props.repo, props.repo)
+
+    //Get right Repository connection type (another file used)
+    let sourceAction = ConnectionType({
+      actionName: props.actionName,
       owner: props.owner,
       repo: props.repo,
       branch: props.branch,
-      oauthToken: cdk.SecretValue.secretsManager(props.oauthToken),
-      output: sourceArtifact,
-    });
+      connectionArn: props.connectionArn,
+      codecommitRepository: codecommitRepository
+    })
 
     //Set a new Codebuild Role for a PipelineProject
-    const testCodebuildRole = new cdk.aws_iam.Role(this, 'project-role', {
+    const codebuildRole = new cdk.aws_iam.Role(this, 'project-role', {
       assumedBy: new cdk.aws_iam.AnyPrincipal()
     });
-    const testCodebuildPolicy = new cdk.aws_iam.Policy(this, 'project-policy', {
+    const codebuildPolicy = new cdk.aws_iam.Policy(this, 'project-policy', {
       statements: [new cdk.aws_iam.PolicyStatement({
         effect: cdk.aws_iam.Effect.ALLOW,
         actions: ["ecr:*"],
         resources: ["*"]
       })]
     });
-    testCodebuildPolicy.attachToRole(testCodebuildRole);
+    codebuildPolicy.attachToRole(codebuildRole);
 
     //Initiate a new CloudFormation Stack --> PipelineProject that will be build
     let project = new cdk.aws_codebuild.PipelineProject(this, props.projectName, {
       projectName: props.projectName,
       buildSpec: cdk.aws_codebuild.BuildSpec.fromSourceFilename('buildspec.yml'),
-      role: testCodebuildRole,
+      role: codebuildRole,
       environment: {
         privileged: true
       }
@@ -73,7 +79,7 @@ export class newPipelineStack extends cdk.Stack {
       stages: [
         {
           stageName: "Source",
-          actions: [gitHubSourceAction]
+          actions: [sourceAction]
         },
         {
           stageName: "Build",
@@ -81,11 +87,10 @@ export class newPipelineStack extends cdk.Stack {
         }]
     });
 
-
     /*--------------------Slack Notifications Block--------------------*/
 
     //Create Slack Notifications on request
-    if (props.slackNotification) {
+    if (props.slackNotifications) {
 
       //Configure slackChannel notifications
       const slackChannel = new cdk.aws_chatbot.SlackChannelConfiguration(this, 'pipeline-slack', {

@@ -4,14 +4,17 @@ import { newPipelineStack } from '../lib/aws-pileline-stack';
 
 const app = new App();
 
+
 let PipelineProps = {
+    //actionName: "CodeStarConnectionsSource",
+    actionName: "CodeCommitSource",
+    connectionArn: "arn:aws:codestar-connections:us-east-2:666398651410:connection/ff28b735-d3b5-4d03-bf79-1fb378a81b4a",
     owner: "Nikita1917s",
     repo: "KeyUA-Pipeline-Prototype",
     branch: "main",
-    oauthToken: 'GITHUB_OAUTH_TOKEN_TESTING',
     projectName: "Updated--PipelineStackProject",
     pipelineName: "Updated--FirstPipeline",
-    slackNotification: true,
+    slackNotifications: true,
     slackWorkspaceId: "TG1K2568N",
     slackChannelId: "C031Z1KJH6C"
 }
