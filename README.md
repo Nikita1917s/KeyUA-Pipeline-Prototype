@@ -1,22 +1,22 @@
 # Welcome Pipeline Creation Application!
-### This Application will create a new Pipeline with main paramenters set
+### This Application will create a new Pipeline with main parameters set
 ## Useful commands
  * `npm run build`   compile typescript to js
  * `npm run watch`   watch for changes and compile
  * `npm run test`    perform the jest unit tests
  * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
+ * `cdk diff`        compare deployed stack with the current state
  * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk bootstrap`   deployment of a AWS CloudFormation template to a specific AWS environment
+ * `cdk bootstrap`   deployment of an AWS CloudFormation template to a specific AWS environment
 
 ## Decription
 
 ### Pipeline Block
-#### To create a new Pipeline you will need to have/provide next data
-* AWS Account with corresponding Role to work with required permissions.
-* All nessesary params to create a new Pipeline and all needed servises.
+#### To create a new Pipeline you will need to have/provide the next data
+* AWS Account with the corresponding Role to work with required permissions.
+* All necessary params to create a new Pipeline and all needed services.
 
-1) Repository Credidentials to be tracked
+1) Repository Credentials to be tracked
 
 #### To use a GitHub (version 2) or BitBucket Repository in a CodePipeline:
 Connection has to be established manually in the AWS Console !!!
@@ -52,5 +52,5 @@ Connection has to be established manually in the AWS Console !!!
 5) Check the Slack App after Pipeline process 
 
 ## To run the application enter to the console next commands:
-1) `cdk bootstrap`   deployment of a AWS CloudFormation template to a specific AWS environment
+1) `cdk bootstrap`   deployment of an AWS CloudFormation template to a specific AWS environment
 2) `cdk deploy`      deploy this stack to your default AWS account/region
