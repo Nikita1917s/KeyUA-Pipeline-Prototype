@@ -91,5 +91,3 @@ describe("PipelineStack creation", () => {
         template.hasResourceProperties("AWS::Chatbot::SlackChannelConfiguration", {});
     });
 });
-
-
