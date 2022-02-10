@@ -18,10 +18,10 @@ let PipelineProps = {
     slackChannelId: "C031Z1KJH6C"
 };
 
-// Create the ProcessorStack.
+// Create the ProcessorStack
 const processorStack = new newPipelineStack(app, 'New--PipelineStack', PipelineProps);
 
-// Prepare the stack for assertions.
+// Prepare the stack for assertions
 const template = Template.fromStack(processorStack);
 
 describe("PipelineStack creation", () => {
