@@ -1,6 +1,9 @@
 {
-  "name": "aws-pileline",
-  "version": "0.1.0",
+  "name": "custom-aws-code-pileline",
+  "version": "1.0.0",
+  "description": "This Application will create a new Pipeline with main parameters set",
+  "author": "Tulupov Nikita",
+  "license": "ISC",
   "bin": {
     "aws-pileline": "bin/aws-pileline.js"
   },

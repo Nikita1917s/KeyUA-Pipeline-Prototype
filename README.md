@@ -8,6 +8,8 @@
  * `cdk diff`        compare deployed stack with the current state
  * `cdk synth`       emits the synthesized CloudFormation template
  * `cdk bootstrap`   deployment of an AWS CloudFormation template to a specific AWS environment
+ * `tsc`             compile typescript to js
+ * `npm test`        run Unit Tests
 
 ## Decription
 
@@ -31,16 +33,11 @@ Connection has to be established manually in the AWS Console !!!
 * repo: `Repository name` (ex: 'repository123'),
 * branch: `Branch name` (ex: 'main'),
 
-
 2) New CloudFormation Stack --> PipelineProject info
 * projectName: `Name of the new CloudFormation Stack (Project) to be created` (ex: 'newPipelineStackProject').
 
 3) New Pipeline Instace info
 * pipelineName: `Name of the new Pipeline Instace to be created` (ex: 'newFirstPipeline').
-
-    actionName: "CodeCommitSource",
-    connectionArn: "arn:aws:codestar-connections:us-east-2:666398651410:connection/ff28b735-d3b5-4d03-bf79-1fb378a81b4a",
-
 
 #### Slack Notifications Block
 * To create a Slack Notifications you have to pass the `true` boolean in the corresponding prop
@@ -51,6 +48,7 @@ Connection has to be established manually in the AWS Console !!!
 4) Add slackWorkspaceId to the Notification Rule.
 5) Check the Slack App after Pipeline process 
 
-## To run the application enter to the console next commands:
-1) `cdk bootstrap`   deployment of an AWS CloudFormation template to a specific AWS environment
-2) `cdk deploy`      deploy this stack to your default AWS account/region
+## To Deploy the application enter to the console next commands:
+1) `tsc && npm test` deploy this stack to your default AWS account/region
+2) `cdk bootstrap`   deployment of an AWS CloudFormation template to a specific AWS environment
+3) `cdk deploy`      deploy this stack to your default AWS account/region
