@@ -6,16 +6,16 @@ const app = new App();
 
 let PipelineProps = {
     //Select right actionName: (CodeStarConnectionsSource / CodeCommitSource)
-    actionName: "<actionName>",
-    connectionArn: "<connectionArn>",
-    owner: "<owner>",
-    repo: "<repo>",
-    branch: "<branch>",
-    projectName: "<projectName>",
-    pipelineName: "<pipelineName>",
-    slackNotifications: true || false,
-    slackWorkspaceId: "<slackWorkspaceId>",
-    slackChannelId: "<slackChannelId>"
+    actionName: "CodeCommitSource",
+    connectionArn: "arn:aws:codestar-connections:us-east-2:666398651410:connection/ff28b735-d3b5-4d03-bf79-1fb378a81b4a",
+    owner: "Nikita1917s",
+    repo: "KeyUA-Pipeline-Prototype",
+    branch: "main",
+    projectName: "Updated--PipelineStackProject",
+    pipelineName: "Updated--FirstPipeline",
+    slackNotifications: true,
+    slackWorkspaceId: "TG1K2568N",
+    slackChannelId: "C031Z1KJH6C"
 };
 
 // Create the ProcessorStack
