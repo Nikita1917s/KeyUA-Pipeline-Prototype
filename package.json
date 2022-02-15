@@ -1,5 +1,5 @@
 {
-  "name": "custom-aws-code-pileline",
+  "name": "aws-cdk-templates",
   "version": "1.0.0",
   "description": "This Application will create a new Pipeline with main parameters set",
   "author": "Tulupov Nikita",
