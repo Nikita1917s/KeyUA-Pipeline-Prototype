@@ -49,6 +49,7 @@ Connection has to be established manually in the AWS Console !!!
 5) Check the Slack App after Pipeline process 
 
 ## To Deploy the application enter to the console next commands:
-1) `tsc && npm test` deploy this stack to your default AWS account/region
-2) `cdk bootstrap`   deployment of an AWS CloudFormation template to a specific AWS environment
-3) `cdk deploy`      deploy this stack to your default AWS account/region
+1) `cd node_modules/aws-cdk-templates` deploy this stack to your default AWS account/region
+2) `tsc && npm test` deploy this stack to your default AWS account/region
+3) `cdk bootstrap`   deployment of an AWS CloudFormation template to a specific AWS environment
+4) `cdk deploy`      deploy this stack to your default AWS account/region
