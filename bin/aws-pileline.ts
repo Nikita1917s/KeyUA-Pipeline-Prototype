@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { App }from 'aws-cdk-lib';
+import { App } from 'aws-cdk-lib';
 import { newPipelineStack } from '../lib/aws-pileline-stack';
 
 const app = new App();
@@ -19,5 +19,3 @@ let PipelineProps = {
 };
 
 new newPipelineStack(app, 'New--PipelineStack', PipelineProps);
-
-app.synth();
